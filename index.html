@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Instagram User Data Collector</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	
+<link href="https://fonts.googleapis.com/css2?family=Gotu&display=swap" rel="stylesheet">
+<style type="text/css">
+	html, body
+	{
+		font-family: "Gotu"
+	}
+	input, textarea
+	{
+		padding: 10px;
+		border-radius: 10px/30px;
+		border-style: solid;
+		border-color: blue;
+		transition-duration: 0.5s;
+		width: 80%;
+	}
+	input:focus, textarea:focus
+	{
+		border-color: skyblue;
+		transition-duration: 0.5s;
+		outline: none;
+	}
+	.sub_btn
+	{
+		display: block;
+		margin: 0 auto;
+		color: white;
+		padding: 10px;
+		border-style: solid;
+		border-width: 1px;
+		background-color: darkgray;
+		transition-duration: 0.5s;
+		outline: none;
+	}
+	.sub_btn:hover
+	{
+		color: red;
+		border-style: double;
+		border-color: red;
+		border-radius: 10px/30px;
+		transition-duration: 0.5s;
+	}
+	a:hover
+	{
+		text-decoration: none;
+	}
+	.loader {
+	  border: 16px solid #f3f3f3; /* Light grey */
+	  border-top: 16px solid #3498db; /* Blue */
+	  border-radius: 50%;
+	  width: 120px;
+	  height: 120px;
+	  animation: spin 2s linear infinite;
+	  margin: 0 auto;
+	}
+
+	@keyframes spin {
+	  0% { transform: rotate(0deg); }
+	  100% { transform: rotate(360deg); }
+	}
+</style>
+</head>
+<body class="bg-light">
+	<div class="text-center m-5">
+		<h1 class="m-5"><b>Instagram User Information Collector</b></h1>
+		<h5 class="text-success">Coded by <b><a href="https://www.github.com/TufayelLUS">Tufayel Ahmed</a></b> using jQuery Ajax only!</h5>
+		<h6><i>Serverless Data Scraper for Instagram</i></h6>
+		<h4>Enter or paste the list of instagram <br>usernames without @ one per line and press "Grab Data"</h5>
+		<textarea rows="10" placeholder="username1" name="user_list" required></textarea>
+		<button onclick="collectData();return false;" class="sub_btn mb-3">Grab Data</button>
+		<div style="display: none" id="loading" class="loader"></div>
+		<div style="display: none" id="result_title"><b>Your Results</b></div>
+		<textarea style="display: none" id="answer" rows="10" placeholder="result"></textarea>
+		<div id="hire" style="display: none;">Need More Data? <b><a href="https://www.github.com/TufayelLUS">Hire me!</a></b></div>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		function getDetails(url,username)
+		{
+			$.ajax({
+			    type: "GET",
+			    headers: {
+			        'Content-Type': 'text/plain'
+			    },
+			    url: url,
+			    success: function (data) {
+			    	var fullname = data.split('","name":"')[1].split('"')[0];
+			    	var followers = data.split('userInteractionCount":"')[1].split('"')[0] + " followers";
+			    	var following =  data.split('edge_follow":{"count":')[1].split('}')[0] + " following";
+			    	var posts =  data.split('owner_to_timeline_media":{"count":')[1].split(',')[0] + " posts";
+			    	//$('body').scrollTo('#result_title');
+			    	$('#loading').fadeOut("slow");
+			    	$('#answer').fadeIn("slow");
+			    	$('#result_title').fadeIn("slow");
+			    	$('#hire').fadeIn("slow");
+			    	$('html, body').animate({
+					    scrollTop: ($('#answer').offset().top)
+					},1000);
+					var last_seen = $('#answer').val();
+			       	$('#answer').val(last_seen + "user: " + username+ "|" + fullname + "|"+followers + "|" + following + "|" + posts + "\n");
+
+			    }
+			});
+		}
+		function collectData()
+		{
+			$('#answer').fadeOut("slow");
+			$('#answer').val("");
+			$('#loading').fadeIn("slow");
+			$('#result_title').fadeOut("slow");
+			$('#hire').fadeOut("slow");
+			var userInput = $('textarea[name="user_list"]').val().split('\n');
+			for(var i=0;i<userInput.length;i++)
+			{
+				getDetails("https://instagram.com/" + userInput[i], userInput[i]);
+			}
+		}
+	</script>
+</body>
+</html>
