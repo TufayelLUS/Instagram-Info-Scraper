@@ -7,3 +7,4 @@ This is an Instagram Profile Data Scraper developed in jQuery Ajax XMLHttpReques
 # Limitation
 <ul><li>No support for checking username that is not available, blind checking.</li>
 <li>Collects only Full Name, Post Count, Follower Count, Following Count & can be extended to collect more data.</li></ul>
+For Demo: <a href="https://novice-geek.com/projects/insta.html">Check Here</a>
